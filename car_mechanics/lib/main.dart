@@ -19,8 +19,12 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AppInfo(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => AppInfo(),
+        )
+      ],
       child: MaterialApp(
         title: 'Final Year Project',
         debugShowCheckedModeBanner: false,
@@ -31,18 +35,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-// return MultiProvider(
-    //   providers: [
-    //     ChangeNotifierProvider(
-    //       create: (context) => AppInfo(),
-    //     )
-    //   ],
-    //   child: MaterialApp(
-    //     title: 'Final Year Project',
-    //     debugShowCheckedModeBanner: false,
-    //     theme: ThemeData(),
-    //     home: const SplashScreen(),
-    //   ),
-    // );
