@@ -1,68 +1,76 @@
-// ignore_for_file: library_private_types_in_public_api
-
 import 'dart:async';
 
-import 'package:car_onwer/global/global.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter/material.dart';
 
-import '../../model/carmechanics_nearby.dart';
+import '../../global/global.dart';
+import '../../model/car_mechanic.dart';
 
 class CarMechanicListScreen extends StatefulWidget {
-  const CarMechanicListScreen({Key? key}) : super(key: key);
+  const CarMechanicListScreen({super.key});
 
   @override
-  _CarMechanicListScreenState createState() => _CarMechanicListScreenState();
+  State<CarMechanicListScreen> createState() => _CarMechanicListScreenState();
 }
 
 class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
-  List<CarMechanic> carMechanics = [];
+  void fetchOnlineMechanics() {
+    DatabaseReference mechanicsRef =
+        FirebaseDatabase.instance.ref().child("acim_mechanics");
 
-  fetchCarMechanics() {
-    DatabaseReference mechanicsRef = FirebaseDatabase.instance
-        .ref()
-        .child("acim_mechanics")
-        .child(currentUser!.uid);
+    mechanicsRef
+        .orderByChild("newMechanicsServiceStatus")
+        .equalTo("Online")
+        .once()
+        .then((DataSnapshot snapshot) {
+          if (snapshot.value != null) {
+            Map<dynamic, dynamic> dataMap =
+                snapshot.value as Map<dynamic, dynamic>;
 
-    mechanicsRef.once().then((carMechanicsSnapShot) {
-      if (carMechanicsSnapShot.snapshot.value != null) {
-        carMechanicsCurrentInfo =
-            CarMechanic.fromSnapshot(carMechanicsSnapShot.snapshot);
-      }
-    });
+            // Iterate over the mechanics data map and extract the required information
+            List<CarMechanic> onlineMechanics = [];
+            dataMap.forEach((key, value) {
+              CarMechanic mechanic = CarMechanic(
+                name: value['name'],
+                locationLatMechanics:
+                    double.parse(value['latitude'].toString()),
+                locationLngMechanics:
+                    double.parse(value['longitude'].toString()),
+              );
+              onlineMechanics.add(mechanic);
+            });
+
+            // Display the list of online mechanics on the car owner's screen
+            setState(() {
+              onlineMechanicsList = onlineMechanics;
+            });
+          } else {
+            // Handle the case when there are no online mechanics
+            setState(() {
+              onlineMechanicsList = [];
+            });
+          }
+        } as FutureOr Function(DatabaseEvent value));
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: SafeArea(
+        child: Scaffold(
           appBar: AppBar(
-            title: const Text('Nearby Car Mechanics'),
+            backgroundColor: Colors.black,
+            title: const Text(
+              "List Of Car Mechanics",
+            ),
+            elevation: 0,
           ),
-          body: Column(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 100, vertical: 10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    // fetchCarMechanics();
-                    print(fetchCarMechanics());
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.all(15),
-                    elevation: 0,
-                    backgroundColor: Colors.black,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                  child: const Text("display car Mechanics"),
-                ),
-              ),
-            ],
-          )),
+          // body:
+        ),
+      ),
     );
   }
 }

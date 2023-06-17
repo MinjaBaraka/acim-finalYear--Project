@@ -2,7 +2,6 @@
 
 import 'dart:async';
 
-import 'package:car_onwer/infoHandler/car_mechanics_info.dart';
 import 'package:car_onwer/model/active_nearby_available_mechanics.dart';
 import 'package:car_onwer/pages/admin/searchcar_mechanics.dart';
 import 'package:car_onwer/requestMethod/geofire_assistant.dart';
@@ -20,11 +19,9 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import '../../global/global.dart';
 import '../../global/progress_dialog.dart';
 import '../../infoHandler/app_info.dart';
-// import '../../model/precise_pickup_location.dart';
 import '../../requestMethod/request_method.dart';
 import '../../widget/pay_fare_amount_dialog.dart';
 import 'drawer_screen.dart';
-// import 'search_places_screen.dart';
 
 class AdminScreen extends StatefulWidget {
   const AdminScreen({
@@ -808,11 +805,12 @@ class _AdminScreenState extends State<AdminScreen> {
                                             await Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                              builder: (context) =>
-                                                  // const SearchPlacesScreen(),
-                                                  // builder: (context) =>
-                                                  // const SearchCarMechanics(),
-                                                  const CarMechanicListScreen()),
+                                            builder: (context) =>
+                                                // const SearchPlacesScreen(),
+                                                // builder: (context) =>
+                                                // const SearchCarMechanics(),
+                                                const CarMechanicListScreen(),
+                                          ),
                                         );
 
                                         if (responseFromSearchScreen ==
@@ -892,7 +890,8 @@ class _AdminScreenState extends State<AdminScreen> {
                                   onPressed: () {
                                     if (Provider.of<AppInfo>(context,
                                                 listen: false)
-                                            .userDropOffLocation!.locationName !=
+                                            .userDropOffLocation!
+                                            .locationName !=
                                         null) {
                                       toggleshowSuggestedRidesContainer();
                                     } else {
