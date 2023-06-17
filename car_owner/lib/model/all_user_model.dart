@@ -20,6 +20,6 @@ class UserModal {
     name = (userSnapshot.value as dynamic)["name"];
     id = userSnapshot.key;
     email = (userSnapshot.value as dynamic)["email"];
-    role = (userSnapshot.value as dynamic)["role"];
+    // role = (userSnapshot.value as dynamic)["role"];
   }
 }

@@ -414,7 +414,7 @@ class _AdminScreenState extends State<AdminScreen> {
       "destination": destinationLocationMap,
       "time": DateTime.now().toString(),
       "userName": userModalCurrentInfo!.name,
-      "userPone": userModalCurrentInfo!.phone,
+      "userPhone": userModalCurrentInfo!.phone,
       "originAddress": originLocation.locationName,
       "destinationAddress": destinationLocation.locationName,
       "mechanicsId": "waiting",
@@ -890,9 +890,9 @@ class _AdminScreenState extends State<AdminScreen> {
                                 const SizedBox(width: 10),
                                 ElevatedButton(
                                   onPressed: () {
-                                    if (Provider.of<CarMechanicsInfo>(context,
+                                    if (Provider.of<AppInfo>(context,
                                                 listen: false)
-                                            .name !=
+                                            .userDropOffLocation!.locationName !=
                                         null) {
                                       toggleshowSuggestedRidesContainer();
                                     } else {

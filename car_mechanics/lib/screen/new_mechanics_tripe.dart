@@ -484,14 +484,12 @@ class _NewMechanicsTripeState extends State<NewMechanicsTripe> {
                               ),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: Container(
-                                  child: Text(
-                                    widget.userRideServiceRequestDetails!
-                                        .originAddress!,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
+                                child: Text(
+                                  widget.userRideServiceRequestDetails!
+                                      .originAddress!,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ),
@@ -507,14 +505,12 @@ class _NewMechanicsTripeState extends State<NewMechanicsTripe> {
                               ),
                               const SizedBox(width: 10),
                               Expanded(
-                                child: Container(
-                                  child: Text(
-                                    widget.userRideServiceRequestDetails!
-                                        .destinationAddress!,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black,
-                                    ),
+                                child: Text(
+                                  widget.userRideServiceRequestDetails!
+                                      .destinationAddress!,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
                                   ),
                                 ),
                               ),

@@ -13,7 +13,7 @@ import '../global/global.dart';
 import '../global/mapkey.dart';
 import '../infoHandler/app_info.dart';
 import '../model/all_user_model.dart';
-import '../model/carmechanics_nearby.dart';
+// import '../model/carmechanics_nearby.dart';
 import '../model/direction_details_info.dart';
 import '../model/directions_model.dart';
 import 'request_assistant.dart';
@@ -148,30 +148,30 @@ class RequestMethod {
     );
   }
 
-  static Future<List<CarMechanic>> fetchCarMechanics() async {
-    DatabaseReference mechanicsRef =
-        FirebaseDatabase.instance.ref().child('car_mechanics');
+  // static Future<List<CarMechanic>> fetchCarMechanics() async {
+  //   DatabaseReference mechanicsRef =
+  //       FirebaseDatabase.instance.ref().child('car_mechanics');
 
-    DataSnapshot snapshot = await mechanicsRef.once() as DataSnapshot;
+  //   DataSnapshot snapshot = await mechanicsRef.once() as DataSnapshot;
 
-    List<CarMechanic> carMechanics = [];
+  //   List<CarMechanic> carMechanics = [];
 
-    if (snapshot.value != null) {
-      Map<dynamic, dynamic> dataMap = snapshot.value as Map<dynamic, dynamic>;
+  //   if (snapshot.value != null) {
+  //     Map<dynamic, dynamic> dataMap = snapshot.value as Map<dynamic, dynamic>;
 
-      dataMap.forEach((key, value) {
-        CarMechanic carMechanic = CarMechanic(
-          name: value['name'],
-          latitude: double.parse(value['latitude'].toString()),
-          longitude: double.parse(value['longitude'].toString()),
-        );
+  //     dataMap.forEach((key, value) {
+  //       CarMechanic carMechanic = CarMechanic(
+  //         name: value['name'],
+  //         latitude: double.parse(value['latitude'].toString()),
+  //         longitude: double.parse(value['longitude'].toString()),
+  //       );
 
-        carMechanics.add(carMechanic);
-      });
-    }
+  //       carMechanics.add(carMechanic);
+  //     });
+  //   }
 
-    return carMechanics;
-  }
+  //   return carMechanics;
+  // }
 }
 
 // class RequestMethod {

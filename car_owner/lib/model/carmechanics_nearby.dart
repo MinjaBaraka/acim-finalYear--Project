@@ -1,11 +1,13 @@
+import 'package:firebase_database/firebase_database.dart';
+
 class CarMechanic {
-  final String name;
-  final double latitude;
-  final double longitude;
+  String? name;
 
   CarMechanic({
-    required this.name,
-    required this.latitude,
-    required this.longitude,
+    this.name,
   });
+
+  CarMechanic.fromSnapshot(DataSnapshot userSnapshot) {
+    name = (userSnapshot.value as dynamic)["name"];
+  }
 }
