@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'infoHandler/app_info.dart';
+import 'infoHandler/car_mechanics_details.dart';
 import 'splashScreen/splash_screen.dart';
 
 Future<void> main() async {
@@ -22,6 +23,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => AppInfo(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => CarMechanicsDetails(),
         ),
       ],
       child: MaterialApp(

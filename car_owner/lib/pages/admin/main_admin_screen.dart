@@ -19,6 +19,7 @@ import 'package:flutter_geofire/flutter_geofire.dart';
 import '../../global/global.dart';
 import '../../global/progress_dialog.dart';
 import '../../infoHandler/app_info.dart';
+import '../../infoHandler/car_mechanics_details.dart';
 import '../../requestMethod/request_method.dart';
 import '../../widget/pay_fare_amount_dialog.dart';
 import 'drawer_screen.dart';
@@ -861,20 +862,21 @@ class _AdminScreenState extends State<AdminScreen> {
                                                 ),
                                               ),
                                               Text(
-                                                Provider.of<AppInfo>(context)
-                                                            .userDropOffLocation !=
+                                                Provider.of<CarMechanicsDetails>(
+                                                                context)
+                                                            .selectCarMechanics !=
                                                         null
-                                                    ? (Provider.of<AppInfo>(
+                                                    ? (Provider.of<CarMechanicsDetails>(
                                                                     context)
-                                                                .userDropOffLocation!
-                                                                .locationName!)
+                                                                .selectCarMechanics!
+                                                                .name!)
                                                             .substring(0, 24) +
                                                         "...."
                                                     : "Select the car mechaincs from the list",
                                                 style: const TextStyle(
                                                     color: Colors.grey,
                                                     fontSize: 14),
-                                              )
+                                              ),
                                             ],
                                           )
                                         ],
