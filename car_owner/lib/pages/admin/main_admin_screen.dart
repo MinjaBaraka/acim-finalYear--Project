@@ -677,7 +677,8 @@ class _AdminScreenState extends State<AdminScreen> {
 
   @override
   Widget build(BuildContext context) {
-    createActiveNearByMechanicsIconMarker();
+    // createActiveNearByMechanicsIconMarker();
+
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -725,6 +726,25 @@ class _AdminScreenState extends State<AdminScreen> {
                   ),
                 ),
               ),
+              // Container for createActiveNearByMechanicsIconMarker()
+              Positioned(
+                  top: 65,
+                  left: 60,
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        createActiveNearByMechanicsIconMarker();
+                      },
+                      icon: const Icon(Icons.add),
+                      label:
+                          const Text("createActiveNearByMechanicsIconMarker"),
+                    ),
+                  )),
               Positioned(
                 bottom: 80,
                 right: 0,
@@ -775,11 +795,11 @@ class _AdminScreenState extends State<AdminScreen> {
                                                           .userPickUpLocation !=
                                                       null
                                                   ? (Provider.of<AppInfo>(
-                                                          context)
-                                                      .userPickUpLocation!
-                                                      .locationName!)
-                                                  //     .substring(0, 24) +
-                                                  // "...."
+                                                                  context)
+                                                              .userPickUpLocation!
+                                                              .locationName!)
+                                                          .substring(0, 24) +
+                                                      "...."
                                                   : "Not Getting Address",
                                               style: const TextStyle(
                                                   color: Colors.grey,
@@ -845,11 +865,11 @@ class _AdminScreenState extends State<AdminScreen> {
                                                             .userDropOffLocation !=
                                                         null
                                                     ? (Provider.of<AppInfo>(
-                                                            context)
-                                                        .userDropOffLocation!
-                                                        .locationName!)
-                                                    //     .substring(0, 24) +
-                                                    // "...."
+                                                                    context)
+                                                                .userDropOffLocation!
+                                                                .locationName!)
+                                                            .substring(0, 24) +
+                                                        "...."
                                                     : "Select the car mechaincs from the list",
                                                 style: const TextStyle(
                                                     color: Colors.grey,

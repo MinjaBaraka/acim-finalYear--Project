@@ -1,9 +1,10 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
-import '../../global/global.dart';
 import '../../model/car_mechanic.dart';
 
 class CarMechanicListScreen extends StatefulWidget {
@@ -18,39 +19,30 @@ class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
     DatabaseReference mechanicsRef =
         FirebaseDatabase.instance.ref().child("acim_mechanics");
 
+    List<CarMechanic> onlineMechanics = [];
+
     mechanicsRef
         .orderByChild("newMechanicsServiceStatus")
         .equalTo("Online")
         .once()
-        .then((DataSnapshot snapshot) {
-          if (snapshot.value != null) {
-            Map<dynamic, dynamic> dataMap =
-                snapshot.value as Map<dynamic, dynamic>;
+        .then((carMechanicsSnapshot) {
+      // print(carMechanicsSnapshot.snapshot.value);
+      if (carMechanicsSnapshot.snapshot.value != null) {
+        Map<dynamic, dynamic> carMechanicsData =
+            carMechanicsSnapshot.snapshot as Map<dynamic, dynamic>;
 
-            // Iterate over the mechanics data map and extract the required information
-            List<CarMechanic> onlineMechanics = [];
-            dataMap.forEach((key, value) {
-              CarMechanic mechanic = CarMechanic(
-                name: value['name'],
-                locationLatMechanics:
-                    double.parse(value['latitude'].toString()),
-                locationLngMechanics:
-                    double.parse(value['longitude'].toString()),
-              );
-              onlineMechanics.add(mechanic);
-            });
-
-            // Display the list of online mechanics on the car owner's screen
-            setState(() {
-              onlineMechanicsList = onlineMechanics;
-            });
-          } else {
-            // Handle the case when there are no online mechanics
-            setState(() {
-              onlineMechanicsList = [];
-            });
-          }
-        } as FutureOr Function(DatabaseEvent value));
+        carMechanicsData.forEach((key, value) {
+          CarMechanic carMechanic = CarMechanic(
+            name: value["name"],
+            locationLatMechanics: double.parse(value["latitude"].toString()),
+            locationLngMechanics: double.parse(value["longitude"].toString()),
+          );
+          onlineMechanics.add(carMechanic);
+        });
+        print(onlineMechanics);
+      }
+      return onlineMechanics;
+    });
   }
 
   @override
@@ -61,15 +53,28 @@ class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
       },
       child: SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            title: const Text(
-              "List Of Car Mechanics",
+            appBar: AppBar(
+              backgroundColor: Colors.black,
+              title: const Text(
+                "List Of Car Mechanics",
+              ),
+              elevation: 0,
             ),
-            elevation: 0,
-          ),
-          // body:
-        ),
+            body: Column(
+              children: [
+                const SizedBox(height: 20),
+                Padding(
+                  padding: const EdgeInsets.only(left: 80),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      fetchOnlineMechanics();
+                    },
+                    icon: const Icon(Icons.list),
+                    label: const Text("List Of Car Mechanics"),
+                  ),
+                ),
+              ],
+            )),
       ),
     );
   }
