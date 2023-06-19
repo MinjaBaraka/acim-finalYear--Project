@@ -27,7 +27,31 @@ class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
             ),
             elevation: 0,
           ),
-          body:
+          body: FirebaseAnimatedList(
+            query: FirebaseDatabase.instance
+                .ref()
+                .child("acim_mechanics")
+                .orderByChild("newMechanicsServiceStatus")
+                .equalTo("Online"),
+            itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                Animation<double> animation, int index) {
+              Map carMechanicsSnapshot = snapshot.value as Map;
+              // print(carMechanicsSnapshot);
+
+              return ListTile(
+                title: Text(carMechanicsSnapshot["name"]),
+                subtitle: Text(
+                  'Location: ${carMechanicsSnapshot['latitude']}, ${carMechanicsSnapshot['longitude']}',
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
               // Column(
               //   children: [
               //     Expanded(
@@ -64,26 +88,3 @@ class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
               //   ],
               // ),
 
-              FirebaseAnimatedList(
-            query: FirebaseDatabase.instance
-                .ref()
-                .child("acim_mechanics")
-                .orderByChild("newMechanicsServiceStatus")
-                .equalTo("Online"),
-            itemBuilder: (BuildContext context, DataSnapshot snapshot,
-                Animation<double> animation, int index) {
-              Map carMechanicsSnapshot = snapshot.value as Map;
-              // print(carMechanicsSnapshot);
-
-              return ListTile(
-                title: Text(carMechanicsSnapshot["name"]),
-                subtitle: Text(
-                    'Location: ${carMechanicsSnapshot['latitude']}, ${carMechanicsSnapshot['longitude']}'),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
