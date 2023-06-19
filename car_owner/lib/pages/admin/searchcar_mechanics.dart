@@ -1,9 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-
-import '../../model/car_mechanic.dart';
 
 class CarMechanicListScreen extends StatefulWidget {
   const CarMechanicListScreen({super.key});
@@ -59,57 +58,46 @@ class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
             ),
             elevation: 0,
           ),
-          body: Column(
-            children: [
-              const SizedBox(height: 20),
-              // Padding(
-              //   padding: const EdgeInsets.only(left: 80),
-              //   child: ElevatedButton.icon(
-              //     onPressed: () {
-              //       fetchOnlineMechanics();
-              //     },
-              //     icon: const Icon(Icons.list),
-              //     label: const Text("List Of Car Mechanics"),
-              //   ),
-              // ),
-              ListView(
-                children: [
-                  StreamBuilder<DatabaseEvent>(
-                    stream: FirebaseDatabase.instance
-                        .ref()
-                        .child("acim_mechanics")
-                        .orderByChild("newMechanicsServiceStatus")
-                        .equalTo("Online")
-                        .onValue,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<DatabaseEvent> snapshot) {
-                      if (snapshot.hasData) {
-                        DataSnapshot data = snapshot.data!.snapshot;
-                        if (data.value != null) {
-                          Map<String, dynamic> carMechanicsData =
-                              data.value as Map<String, dynamic>;
+          // body: Column(
+          //   children: [
+          // const SizedBox(height: 20),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 80),
+          //   child: ElevatedButton.icon(
+          //     onPressed: () {
+          //       fetchOnlineMechanics();
+          //     },
+          //     icon: const Icon(Icons.list),
+          //     label: const Text("List Of Car Mechanics"),
+          //   ),
+          // ),
+          //   ],
+          // ),
+          body: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: FirebaseAnimatedList(
+              query: FirebaseDatabase.instance
+                  .ref()
+                  .child("acim_mechanics")
+                  .orderByChild("newMechanicsServiceStatus")
+                  .equalTo("Online"),
+              itemBuilder: (BuildContext context, DataSnapshot snapshot,
+                  Animation<double> animation, int index) {
+                Map carMechanicsSnapshot = snapshot.value as Map;
+                print(carMechanicsSnapshot);
+                // Process the snapshot data
+                // Map<String, dynamic> mechanicsData = snapshot.value;
 
-                          List<CarMechanic> onlineMechanics = carMechanicsData
-                              .entries
-                              .map((entry) => CarMechanic(
-                                    key: entry.key,
-                                    name: entry.value["name"],
-                                    locationLatMechanics: double.parse(
-                                        entry.value["latitude"].toString()),
-                                    locationLngMechanics: double.parse(
-                                        entry.value["longitude"].toString()),
-                                  ))
-                              .toList();
-
-                          print(onlineMechanics);
-                        }
-                      }
-                      return const CircularProgressIndicator();
-                    },
-                  ),
-                ],
-              ),
-            ],
+                return ListTile(
+                  title: Text(carMechanicsSnapshot["name"]),
+                  subtitle: Text(
+                      'Location: ${carMechanicsSnapshot['latitude']}, ${carMechanicsSnapshot['longitude']}'),
+                );
+              },
+            ),
           ),
         ),
       ),
