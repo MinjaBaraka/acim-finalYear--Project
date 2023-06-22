@@ -1,8 +1,10 @@
 // ignore_for_file: avoid_print
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../infoHandler/car_mechanics_details.dart';
 
 class CarMechanicListScreen extends StatefulWidget {
   const CarMechanicListScreen({super.key});
@@ -12,6 +14,37 @@ class CarMechanicListScreen extends StatefulWidget {
 }
 
 class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
+  // fecthCarMechanicsWhoIsOnline() {
+  //   DatabaseReference mechanicsRef =
+  //       FirebaseDatabase.instance.ref().child("acim_mechanics");
+
+  //   List<CarMechanic> onlineMechanics = [];
+
+  //   mechanicsRef
+  //       .orderByChild("newMechanicsServiceStatus")
+  //       .equalTo("Online")
+  //       .once()
+  //       .then((DatabaseEvent carMechanicsEvent) {
+  //     DataSnapshot carMechanicsSnapshot = carMechanicsEvent.snapshot;
+  //     if (carMechanicsSnapshot.value != null) {
+  //       Map<dynamic, dynamic> carMechanicsData =
+  //           carMechanicsSnapshot.value as Map<dynamic, dynamic>;
+
+  //       carMechanicsData.forEach((key, value) {
+  //         CarMechanic carMechanics = CarMechanic(
+  //           key: key.toString(),
+  //           name: value["name"],
+  //           locationLatMechanics: double.parse(value["Latitude"].toString()),
+  //           locationLngMechanics: double.parse(value["Longutide"].toString()),
+  //         );
+  //         onlineMechanics.add(carMechanics);
+  //       });
+
+  //       print(onlineMechanics);
+  //     }
+  //   });
+  // }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -32,6 +65,12 @@ class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
               color: Colors.grey,
               borderRadius: BorderRadius.circular(16),
             ),
+            // child: ElevatedButton(
+            //   onPressed: () {
+            //     fecthCarMechanicsWhoIsOnline();
+            //   },
+            //   child: const Text("Click to Print Online"),
+            // ),
             child: FirebaseAnimatedList(
               query: FirebaseDatabase.instance
                   .ref()
@@ -41,12 +80,24 @@ class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
               itemBuilder: (BuildContext context, DataSnapshot snapshot,
                   Animation<double> animation, int index) {
                 Map carMechanicsSnapshot = snapshot.value as Map;
-                print(carMechanicsSnapshot);
+                String carMechanicsName = carMechanicsSnapshot["name"];
+                // print(carMechanicsSnapshot);
 
                 return ListTile(
-                  title: Text(carMechanicsSnapshot["name"]),
+                  title: Text(carMechanicsName),
                   subtitle: Text(
                       'Location: ${carMechanicsSnapshot['latitude']}, ${carMechanicsSnapshot['longitude']}'),
+                  trailing: ElevatedButton(
+                    onPressed: () {
+                      Provider.of<CarMechanicsDetails>(context, listen: false)
+                          .selectCarMechanics;
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                    ),
+                    child: const Text("Pick Mechanics"),
+                  ),
                 );
               },
             ),

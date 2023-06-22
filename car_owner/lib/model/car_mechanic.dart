@@ -6,6 +6,7 @@ class CarMechanic {
   CarMechanic({
     this.name,
     this.locationLatMechanics,
-    this.locationLngMechanics, required String key,
+    this.locationLngMechanics,
+    required String key,
   });
 }
