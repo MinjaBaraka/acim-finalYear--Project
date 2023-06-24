@@ -2,8 +2,8 @@ import 'package:car_onwer/model/car_mechanic.dart';
 import 'package:flutter/material.dart';
 
 class CarMechanicsDetails extends ChangeNotifier {
-  late CarMechanic selectCarMechanics;
-  // CarMechanic? selectCarMechanics;
+  // late final CarMechanic selectCarMechanics;
+  CarMechanic? selectCarMechanics;
 
   void pickCarMechanisWhoOnlineOnly(CarMechanic selectCarMechanicsAddress) {
     selectCarMechanics = selectCarMechanicsAddress;

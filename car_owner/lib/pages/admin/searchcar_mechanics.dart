@@ -87,6 +87,8 @@ class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
                   title: Text(carMechanicsName),
                   trailing: ElevatedButton(
                     onPressed: () {
+                      Provider.of<CarMechanicsDetails>(context, listen: false)
+                          .selectCarMechanics;
                       // print(carMechanicsName);
                       Navigator.pop(context, "ObtainedDropOff");
                     },

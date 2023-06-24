@@ -864,7 +864,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                               //                   context)
                                               //               .selectCarMechanics !=
                                               //           null
-                                              //       ? (Provider.of<CarMechanicsDetails>(
+                                              //  /     ? (Provider.of<CarMechanicsDetails>(
                                               //                       context)
                                               //                   .selectCarMechanics!
                                               //                   .name!)
@@ -875,18 +875,29 @@ class _AdminScreenState extends State<AdminScreen> {
                                               //       color: Colors.grey,
                                               //       fontSize: 14),
                                               // ),
+
                                               openNavigationDrawer == false
                                                   ? const Text(
                                                       "Select the car mechaincs from the list",
                                                       style: TextStyle(
-                                                          color: Colors.grey,
-                                                          fontSize: 14),
+                                                        color: Colors.grey,
+                                                        fontSize: 14,
+                                                      ),
                                                     )
                                                   : Text(
+                                                      // Provider.of<CarMechanicsDetails>(
+                                                      //         context)
+                                                      //     .selectCarMechanics!
+                                                      //     .name!,
                                                       Provider.of<CarMechanicsDetails>(
-                                                              context)
-                                                          .selectCarMechanics!
-                                                          .name,
+                                                                  context)
+                                                              .selectCarMechanics
+                                                              ?.name ??
+                                                          "No car mechanics selected",
+                                                      style: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 14,
+                                                      ),
                                                     ),
                                             ],
                                           )

@@ -1,10 +1,10 @@
 class CarMechanic {
-  String name;
+  String? name;
   double? locationLatMechanics;
   double? locationLngMechanics;
 
   CarMechanic({
-    required this.name,
+    this.name,
     this.locationLatMechanics,
     this.locationLngMechanics,
     required String key,
