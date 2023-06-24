@@ -85,13 +85,10 @@ class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
 
                 return ListTile(
                   title: Text(carMechanicsName),
-                  subtitle: Text(
-                      'Location: ${carMechanicsSnapshot['latitude']}, ${carMechanicsSnapshot['longitude']}'),
                   trailing: ElevatedButton(
                     onPressed: () {
-                      Provider.of<CarMechanicsDetails>(context, listen: false)
-                          .selectCarMechanics;
-                      Navigator.pop(context);
+                      // print(carMechanicsName);
+                      Navigator.pop(context, "ObtainedDropOff");
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,

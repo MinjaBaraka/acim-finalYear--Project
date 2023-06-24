@@ -71,7 +71,8 @@ class _AdminScreenState extends State<AdminScreen> {
   String userName = "";
   String userEmail = "";
 
-  bool openNavigatioinDrawer = true;
+  // bool openNavigationDrawer = true;
+  bool openNavigationDrawer = false;
   bool activeNearbyMechanicsKeysLoaded = false;
   bool showSuggestedRidesContainerHeight = false;
 
@@ -827,9 +828,6 @@ class _AdminScreenState extends State<AdminScreen> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                // const SearchPlacesScreen(),
-                                                // builder: (context) =>
-                                                // const SearchCarMechanics(),
                                                 const CarMechanicListScreen(),
                                           ),
                                         );
@@ -837,7 +835,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                         if (responseFromSearchScreen ==
                                             "ObtainedDropOff") {
                                           setState(() {
-                                            openNavigatioinDrawer = false;
+                                            openNavigationDrawer = true;
                                           });
                                         }
                                         await drawPolylineFromOriginToDestination();
@@ -861,22 +859,35 @@ class _AdminScreenState extends State<AdminScreen> {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                              Text(
-                                                Provider.of<CarMechanicsDetails>(
-                                                                context)
-                                                            .selectCarMechanics !=
-                                                        null
-                                                    ? (Provider.of<CarMechanicsDetails>(
-                                                                    context)
-                                                                .selectCarMechanics!
-                                                                .name!)
-                                                            .substring(0, 24) +
-                                                        "...."
-                                                    : "Select the car mechaincs from the list",
-                                                style: const TextStyle(
-                                                    color: Colors.grey,
-                                                    fontSize: 14),
-                                              ),
+                                              // Text(
+                                              //   Provider.of<CarMechanicsDetails>(
+                                              //                   context)
+                                              //               .selectCarMechanics !=
+                                              //           null
+                                              //       ? (Provider.of<CarMechanicsDetails>(
+                                              //                       context)
+                                              //                   .selectCarMechanics!
+                                              //                   .name!)
+                                              //               .substring(0, 24) +
+                                              //           "...."
+                                              //       : "Select the car mechaincs from the list",
+                                              //   style: const TextStyle(
+                                              //       color: Colors.grey,
+                                              //       fontSize: 14),
+                                              // ),
+                                              openNavigationDrawer == false
+                                                  ? const Text(
+                                                      "Select the car mechaincs from the list",
+                                                      style: TextStyle(
+                                                          color: Colors.grey,
+                                                          fontSize: 14),
+                                                    )
+                                                  : Text(
+                                                      Provider.of<CarMechanicsDetails>(
+                                                              context)
+                                                          .selectCarMechanics!
+                                                          .name,
+                                                    ),
                                             ],
                                           )
                                         ],
@@ -1265,3 +1276,7 @@ class _AdminScreenState extends State<AdminScreen> {
     );
   }
 }
+
+                                                // const SearchPlacesScreen(),
+                                                // builder: (context) =>
+                                                // const SearchCarMechanics(),
