@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../auth/login_screen.dart';
 import '../../global/global.dart';
+import 'payment.dart';
 import 'profile_screen.dart';
 
 class DrawerScreen extends StatelessWidget {
@@ -81,13 +82,24 @@ class DrawerScreen extends StatelessWidget {
               ),
               trailing: Icon(Icons.chevron_right),
             ),
-            const ListTile(
-              leading: Icon(Icons.credit_card),
-              title: Text(
+            ListTile(
+              leading: const Icon(Icons.credit_card),
+              title: const Text(
                 "Payment",
                 style: TextStyle(fontSize: 15.0),
               ),
-              trailing: Icon(Icons.chevron_right),
+              trailing: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          const PaymentFlutterWave('Payment', key: null),
+                    ),
+                  );
+                },
+                child: const Icon(Icons.chevron_right),
+              ),
             ),
             // const ListTile(
             //   leading: Icon(Icons.notifications_active_outlined),

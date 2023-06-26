@@ -41,6 +41,7 @@ dependencies:
   flutter_launcher_icons: ^0.13.1
   flutter_polyline_points: ^1.0.0
   fluttertoast: ^8.2.2
+  flutterwave_standard: ^1.0.7
   font_awesome_flutter: ^10.4.0
   geocoder2: ^1.4.0
   geolocator: ^9.0.2
@@ -53,11 +54,13 @@ dependencies:
   provider: ^6.0.5
   smooth_star_rating_nsafe: ^1.0.0+1
   url_launcher: ^6.1.11
+  uuid: ^3.0.7
+  
 
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
-    sdk: flutter
+    sdk: flutter 
 
 # flutter_launcher_icons:
 #   android: "launcher_icon"

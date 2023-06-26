@@ -859,12 +859,13 @@ class _AdminScreenState extends State<AdminScreen> {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
+
                                               // Text(
                                               //   Provider.of<CarMechanicsDetails>(
                                               //                   context)
                                               //               .selectCarMechanics !=
                                               //           null
-                                              //  /     ? (Provider.of<CarMechanicsDetails>(
+                                              //       ? (Provider.of<CarMechanicsDetails>(
                                               //                       context)
                                               //                   .selectCarMechanics!
                                               //                   .name!)
@@ -904,7 +905,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                         ],
                                       ),
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
@@ -912,30 +913,14 @@ class _AdminScreenState extends State<AdminScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                // ElevatedButton(
-                                //   onPressed: () {
-                                //     Navigator.push(
-                                //         context,
-                                //         MaterialPageRoute(
-                                //           builder: (context) =>
-                                //               const PrecisePickUpLocation(),
-                                //         ));
-                                //   },
-                                //   style: ElevatedButton.styleFrom(
-                                //     textStyle: const TextStyle(
-                                //       fontWeight: FontWeight.bold,
-                                //       fontSize: 16,
-                                //     ),
-                                //   ),
-                                //   child: const Text("change Pick Up Address"),
-                                // ),
                                 const SizedBox(width: 10),
                                 ElevatedButton(
                                   onPressed: () {
-                                    if (Provider.of<AppInfo>(context,
+                                    if (Provider.of<CarMechanicsDetails>(
+                                                context,
                                                 listen: false)
-                                            .userDropOffLocation!
-                                            .locationName !=
+                                            .selectCarMechanics!
+                                            .name !=
                                         null) {
                                       toggleshowSuggestedRidesContainer();
                                     } else {
@@ -969,6 +954,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 left: 0,
                 right: 0,
                 child: Container(
+                  // height: suggestedRidesContainerHeight,
                   height: searchingForDriverMechanicsContainer,
                   decoration: const BoxDecoration(
                     color: Colors.white,
@@ -990,7 +976,7 @@ class _AdminScreenState extends State<AdminScreen> {
                         const SizedBox(height: 10),
                         const Center(
                           child: Text(
-                            "Searching for a Mechanics...",
+                            "Sending Notification to Mechanics...",
                             style: TextStyle(
                               color: Colors.grey,
                               fontSize: 22,
@@ -1001,7 +987,8 @@ class _AdminScreenState extends State<AdminScreen> {
                         const SizedBox(height: 20),
                         GestureDetector(
                           onTap: () {
-                            referenceMechanicsRequest!.remove();
+                            // referenceMechanicsRequest!.remove();
+                            referenceMechanicsRequest?.remove();
                             setState(() {
                               searchingForDriverMechanicsContainer = 0;
                               suggestedRidesContainerHeight = 0;
@@ -1045,241 +1032,190 @@ class _AdminScreenState extends State<AdminScreen> {
 
               // UI for Suggested rides
 
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  height: suggestedRidesContainerHeight,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(20),
-                      topLeft: Radius.circular(20),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                              child: const Icon(
-                                Icons.star,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(width: 15),
-                            Text(
-                              Provider.of<AppInfo>(context)
-                                          .userPickUpLocation !=
-                                      null
-                                  ? (Provider.of<AppInfo>(context)
-                                      .userPickUpLocation!
-                                      .locationName!)
-                                  //     .substring(0, 24) +
-                                  // "...."
-                                  : "Where to..?",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                color: Colors.grey,
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                              child: const Icon(
-                                Icons.star,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const SizedBox(width: 15),
-                            Text(
-                              Provider.of<AppInfo>(context)
-                                          .userDropOffLocation !=
-                                      null
-                                  ? (Provider.of<AppInfo>(context)
-                                      .userDropOffLocation!
-                                      .locationName!)
-                                  //     .substring(0, 24) +
-                                  // "...."
-                                  : "Where to..?",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          "SUGGESTED MECHANICS",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedMechanicsVehicleType =
-                                      "Car mechanics";
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: selectedMechanicsVehicleType ==
-                                          "Car Mechanics"
-                                      ? Colors.grey
-                                      : Colors.black,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(25),
-                                  child: Column(
-                                    children: [
-                                      Image.asset(
-                                        "assets/image/2.jpg",
-                                        scale: 2,
-                                        width: 50,
-                                        height: 50,
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        "Car Mechanics",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: selectedMechanicsVehicleType ==
-                                                  "Car Mechanics"
-                                              ? Colors.black
-                                              : Colors.grey,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        // "Fare amount",
-                                        tripDirectionDetailsInfo != null
-                                            ? "Tz ${((RequestMethod.calculateFareAmountFromOriginToDestination(tripDirectionDetailsInfo!) * 2) * 107).toStringAsFixed(1)}"
-                                            : "Null",
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  selectedMechanicsVehicleType =
-                                      "CNG mechanics";
-                                });
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: selectedMechanicsVehicleType ==
-                                          "CNG Mechanics"
-                                      ? Colors.grey
-                                      : Colors.black,
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(25),
-                                  child: Column(
-                                    children: [
-                                      Image.asset(
-                                        "assets/image/2.jpg",
-                                        scale: 2,
-                                        width: 50,
-                                        height: 50,
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        "CNG Mechanics",
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: selectedMechanicsVehicleType ==
-                                                  "CNG Mechanics"
-                                              ? Colors.black
-                                              : Colors.grey,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        // "Fare amount",
-                                        tripDirectionDetailsInfo != null
-                                            ? "Tz ${((RequestMethod.calculateFareAmountFromOriginToDestination(tripDirectionDetailsInfo!) * 1.5) * 107).toStringAsFixed(1)}"
-                                            : "Null",
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              if (selectedMechanicsVehicleType != "") {
-                                saveMechanicsRequestMechanicsInformation(
-                                    selectedMechanicsVehicleType);
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg:
-                                        "Please select a type of services from \n suggested car mechanics");
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: const BoxDecoration(
-                                color: Colors.blue,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(19),
-                                ),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "Request Car Mechanics",
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 20,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+              // Positioned(
+              //   left: 0,
+              //   right: 0,
+              //   bottom: 0,
+              //   child: Container(
+              //     height: suggestedRidesContainerHeight,
+              //     decoration: const BoxDecoration(
+              //       color: Colors.white,
+              //       borderRadius: BorderRadius.only(
+              //         topRight: Radius.circular(20),
+              //         topLeft: Radius.circular(20),
+              //       ),
+              //     ),
+              //     child: Padding(
+              //       padding: const EdgeInsets.all(20),
+              //       child: Column(
+              //         crossAxisAlignment: CrossAxisAlignment.start,
+              //         children: [
+              //           Row(
+              //             children: [
+              //               Container(
+              //                 padding: const EdgeInsets.all(2),
+              //                 decoration: BoxDecoration(
+              //                   color: Colors.blue,
+              //                   borderRadius: BorderRadius.circular(2),
+              //                 ),
+              //                 child: const Icon(
+              //                   Icons.star,
+              //                   color: Colors.white,
+              //                 ),
+              //               ),
+              //               const SizedBox(width: 15),
+              //               Text(
+              //                 Provider.of<AppInfo>(context)
+              //                             .userPickUpLocation !=
+              //                         null
+              //                     ? (Provider.of<AppInfo>(context)
+              //                                 .userPickUpLocation!
+              //                                 .locationName!)
+              //                             .substring(0, 24) +
+              //                         "...."
+              //                     : "Where to..?",
+              //                 style: const TextStyle(
+              //                   fontWeight: FontWeight.bold,
+              //                   fontSize: 18,
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //           const SizedBox(height: 20),
+              //           Row(
+              //             children: [
+              //               Container(
+              //                 padding: const EdgeInsets.all(2),
+              //                 decoration: BoxDecoration(
+              //                   color: Colors.grey,
+              //                   borderRadius: BorderRadius.circular(2),
+              //                 ),
+              //                 child: const Icon(
+              //                   Icons.star,
+              //                   color: Colors.white,
+              //                 ),
+              //               ),
+              //               const SizedBox(width: 15),
+              //               Text(
+              //                 Provider.of<AppInfo>(context)
+              //                             .userDropOffLocation !=
+              //                         null
+              //                     ? (Provider.of<AppInfo>(context)
+              //                                 .userDropOffLocation!
+              //                                 .locationName!)
+              //                             .substring(0, 24) +
+              //                         "...."
+              //                     : "Where to..?",
+              //                 style: const TextStyle(
+              //                   fontWeight: FontWeight.bold,
+              //                   fontSize: 18,
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //           const SizedBox(height: 20),
+              //           const Text(
+              //             "SUGGESTED MECHANICS",
+              //             style: TextStyle(
+              //               fontWeight: FontWeight.bold,
+              //             ),
+              //           ),
+              //           const SizedBox(height: 20),
+              //           Row(
+              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //             children: [
+              //               GestureDetector(
+              //                 onTap: () {
+              //                   setState(() {
+              //                     selectedMechanicsVehicleType =
+              //                         "Car mechanics";
+              //                   });
+              //                 },
+              //                 child: Container(
+              //                   decoration: BoxDecoration(
+              //                     color: selectedMechanicsVehicleType ==
+              //                             "Car Mechanics"
+              //                         ? Colors.grey
+              //                         : Colors.black,
+              //                     borderRadius: BorderRadius.circular(12),
+              //                   ),
+              //                   child: Padding(
+              //                     padding: const EdgeInsets.all(25),
+              //                     child: Column(
+              //                       children: [
+              //                         Image.asset(
+              //                           "assets/image/2.jpg",
+              //                           scale: 2,
+              //                           width: 50,
+              //                           height: 50,
+              //                         ),
+              //                         const SizedBox(height: 8),
+              //                         Text(
+              //                           "Car Mechanics",
+              //                           style: TextStyle(
+              //                             fontWeight: FontWeight.bold,
+              //                             color: selectedMechanicsVehicleType ==
+              //                                     "Car Mechanics"
+              //                                 ? Colors.black
+              //                                 : Colors.grey,
+              //                           ),
+              //                         ),
+              //                         const SizedBox(height: 2),
+              //                         Text(
+              //                           // "Fare amount",
+              //                           tripDirectionDetailsInfo != null
+              //                               ? "Tz ${((RequestMethod.calculateFareAmountFromOriginToDestination(tripDirectionDetailsInfo!) * 2) * 107).toStringAsFixed(1)}"
+              //                               : "Null",
+              //                           style: const TextStyle(
+              //                             color: Colors.grey,
+              //                           ),
+              //                         ),
+              //                       ],
+              //                     ),
+              //                   ),
+              //                 ),
+              //               ),
+              //             ],
+              //           ),
+              //           const SizedBox(height: 20),
+              //           Expanded(
+              //             child: GestureDetector(
+              //               onTap: () {
+              //                 if (selectedMechanicsVehicleType != "") {
+              //                   saveMechanicsRequestMechanicsInformation(
+              //                       selectedMechanicsVehicleType);
+              //                 } else {
+              //                   Fluttertoast.showToast(
+              //                       msg:
+              //                           "Please select a type of services from \n suggested car mechanics");
+              //                 }
+              //               },
+              //               child: Container(
+              //                 padding: const EdgeInsets.all(12),
+              //                 decoration: const BoxDecoration(
+              //                   color: Colors.blue,
+              //                   borderRadius: BorderRadius.all(
+              //                     Radius.circular(19),
+              //                   ),
+              //                 ),
+              //                 child: const Center(
+              //                   child: Text(
+              //                     "Request Car Mechanics",
+              //                     style: TextStyle(
+              //                       color: Colors.black,
+              //                       fontWeight: FontWeight.bold,
+              //                       fontSize: 20,
+              //                     ),
+              //                   ),
+              //                 ),
+              //               ),
+              //             ),
+              //           ),
+              //         ],
+              //       ),
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -1291,3 +1227,21 @@ class _AdminScreenState extends State<AdminScreen> {
                                                 // const SearchPlacesScreen(),
                                                 // builder: (context) =>
                                                 // const SearchCarMechanics(),
+
+                                                // ElevatedButton(
+                                                //   onPressed: () {
+                                                //     Navigator.push(
+                                                //         context,
+                                                //         MaterialPageRoute(
+                                                //           builder: (context) =>
+                                                //               const PrecisePickUpLocation(),
+                                                //         ));
+                                                //   },
+                                                //   style: ElevatedButton.styleFrom(
+                                                //     textStyle: const TextStyle(
+                                                //       fontWeight: FontWeight.bold,
+                                                //       fontSize: 16,
+                                                //     ),
+                                                //   ),
+                                                //   child: const Text("change Pick Up Address"),
+                                                // ),

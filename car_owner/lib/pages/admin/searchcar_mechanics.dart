@@ -2,9 +2,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../infoHandler/car_mechanics_details.dart';
 
 class CarMechanicListScreen extends StatefulWidget {
   const CarMechanicListScreen({super.key});
@@ -87,8 +84,8 @@ class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
                   title: Text(carMechanicsName),
                   trailing: ElevatedButton(
                     onPressed: () {
-                      Provider.of<CarMechanicsDetails>(context, listen: false)
-                          .selectCarMechanics;
+                      // Provider.of<CarMechanicsDetails>(context, listen: false)
+                      //     .selectCarMechanics;
                       // print(carMechanicsName);
                       Navigator.pop(context, "ObtainedDropOff");
                     },
