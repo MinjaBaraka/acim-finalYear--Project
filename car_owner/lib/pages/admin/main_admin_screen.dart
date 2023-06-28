@@ -831,14 +831,15 @@ class _AdminScreenState extends State<AdminScreen> {
                                                 const CarMechanicListScreen(),
                                           ),
                                         );
-
                                         if (responseFromSearchScreen ==
                                             "ObtainedDropOff") {
                                           setState(() {
                                             openNavigationDrawer = true;
                                           });
                                         }
-                                        await drawPolylineFromOriginToDestination();
+                                        // await drawPolylineFromOriginToDestination();
+                                        // print(
+                                        //     drawPolylineFromOriginToDestination);
                                       },
                                       child: Row(
                                         children: [
@@ -865,7 +866,7 @@ class _AdminScreenState extends State<AdminScreen> {
                                               //                   context)
                                               //               .selectCarMechanics !=
                                               //           null
-                                              //       ? (Provider.of<CarMechanicsDetails>(
+                                              //  /     ? (Provider.of<CarMechanicsDetails>(
                                               //                       context)
                                               //                   .selectCarMechanics!
                                               //                   .name!)
@@ -916,6 +917,11 @@ class _AdminScreenState extends State<AdminScreen> {
                                 const SizedBox(width: 10),
                                 ElevatedButton(
                                   onPressed: () {
+                                    // print(Provider.of<CarMechanicsDetails>(
+                                    //         context,
+                                    //         listen: false)
+                                    //     .selectCarMechanics!
+                                    //     .name);
                                     if (Provider.of<CarMechanicsDetails>(
                                                 context,
                                                 listen: false)
