@@ -84,11 +84,7 @@ class _CarMechanicListScreenState extends State<CarMechanicListScreen> {
                   title: Text(carMechanicsName),
                   trailing: ElevatedButton(
                     onPressed: () {
-                      // Provider.of<CarMechanicsDetails>(context, listen: false)
-                      //     .selectCarMechanics;
-                      // print(carMechanicsName);
-                      print("Car Mechanics Name: $carMechanicsName");
-                      Navigator.pop(context, "ObtainedDropOff");
+                      Navigator.pop(context, carMechanicsName);
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,

@@ -70,6 +70,7 @@ class _AdminScreenState extends State<AdminScreen> {
 
   String userName = "";
   String userEmail = "";
+  String? carMechanicsName;
 
   // bool openNavigationDrawer = true;
   bool openNavigationDrawer = false;
@@ -198,17 +199,20 @@ class _AdminScreenState extends State<AdminScreen> {
 
       for (ActiveNearByAvailableMechanics eachMechanics
           in GeofireAssistant.activeNearByAvailableMechanicslist) {
-        LatLng eachMechanicsActivePosition = LatLng(
-            eachMechanics.locationLatitude!, eachMechanics.locationLongitude!);
+        if (eachMechanics.locationLatitude != null &&
+            eachMechanics.locationLongitude != null) {
+          LatLng eachMechanicsActivePosition = LatLng(
+              eachMechanics.locationLatitude!,
+              eachMechanics.locationLongitude!);
+          Marker marker = Marker(
+            markerId: MarkerId(eachMechanics.mechanicsId!),
+            position: eachMechanicsActivePosition,
+            icon: activeNearbyIcon!,
+            rotation: 360,
+          );
 
-        Marker marker = Marker(
-          markerId: MarkerId(eachMechanics.mechanicsId!),
-          position: eachMechanicsActivePosition,
-          icon: activeNearbyIcon!,
-          rotation: 360,
-        );
-
-        mechanicsMarkerSet.add(marker);
+          mechanicsMarkerSet.add(marker);
+        }
       }
 
       setState(() {
@@ -235,129 +239,131 @@ class _AdminScreenState extends State<AdminScreen> {
     var destinationPosition =
         Provider.of<AppInfo>(context, listen: false).userDropOffLocation;
 
-    var originLatLng = LatLng(
-        originPosition!.locationLatitude!, originPosition.locationLongtitude!);
-    var destinationLatLng = LatLng(destinationPosition!.locationLatitude!,
-        destinationPosition.locationLongtitude!);
+    if (originPosition != null && destinationPosition != null) {
+      var originLatLng = LatLng(
+          originPosition.locationLatitude!, originPosition.locationLongtitude!);
+      var destinationLatLng = LatLng(destinationPosition.locationLatitude!,
+          destinationPosition.locationLongtitude!);
 
-    showDialog(
-      context: context,
-      builder: (context) => const ProgressDialog(
-        message: "Please wait....",
-      ),
-    );
+      showDialog(
+        context: context,
+        builder: (context) => const ProgressDialog(
+          message: "Please wait....",
+        ),
+      );
 
-    var directionDetailsInfo =
-        await RequestMethod.obtainOriginToDestinationDirectionDetails(
-            originLatLng, destinationLatLng);
-    // print(directionDetailsInfo);
+      var directionDetailsInfo =
+          await RequestMethod.obtainOriginToDestinationDirectionDetails(
+              originLatLng, destinationLatLng);
+      // print(directionDetailsInfo);
 
-    setState(() {
-      tripDirectionDetailsInfo = directionDetailsInfo;
-    });
+      setState(() {
+        tripDirectionDetailsInfo = directionDetailsInfo;
+      });
 
-    Navigator.pop(context);
+      Navigator.pop(context);
 
-    // Create an instance of PolylinePoints
+      // Create an instance of PolylinePoints
 
-    PolylinePoints polylinePoints = PolylinePoints();
-    List<PointLatLng> decodePolylinePointsResultList =
-        polylinePoints.decodePolyline(directionDetailsInfo.ePoints!);
+      PolylinePoints polylinePoints = PolylinePoints();
+      List<PointLatLng> decodePolylinePointsResultList =
+          polylinePoints.decodePolyline(directionDetailsInfo.ePoints!);
 
-    pLineCordinatesList.clear();
+      pLineCordinatesList.clear();
 
-    if (decodePolylinePointsResultList.isNotEmpty) {
-      for (var pointLatLng in decodePolylinePointsResultList) {
-        pLineCordinatesList
-            .add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+      if (decodePolylinePointsResultList.isNotEmpty) {
+        for (var pointLatLng in decodePolylinePointsResultList) {
+          pLineCordinatesList
+              .add(LatLng(pointLatLng.latitude, pointLatLng.longitude));
+        }
       }
-    }
 
-    print(decodePolylinePointsResultList
-        .map((point) => point.toString())
-        .toList());
+      print(decodePolylinePointsResultList
+          .map((point) => point.toString())
+          .toList());
 
-    polylineSet.clear();
+      polylineSet.clear();
 
-    setState(() {
-      Polyline polyline = Polyline(
-        color: Colors.blue,
-        polylineId: const PolylineId('polylineID'),
-        jointType: JointType.round,
-        points: pLineCordinatesList,
-        startCap: Cap.roundCap,
-        endCap: Cap.roundCap,
-        geodesic: true,
-        width: 5,
+      setState(() {
+        Polyline polyline = Polyline(
+          color: Colors.blue,
+          polylineId: const PolylineId('polylineID'),
+          jointType: JointType.round,
+          points: pLineCordinatesList,
+          startCap: Cap.roundCap,
+          endCap: Cap.roundCap,
+          geodesic: true,
+          width: 5,
+        );
+        polylineSet.add(polyline);
+      });
+
+      LatLngBounds boundsLatLng;
+      if (originLatLng.latitude > destinationLatLng.latitude &&
+          originLatLng.longitude > destinationLatLng.longitude) {
+        boundsLatLng =
+            LatLngBounds(southwest: destinationLatLng, northeast: originLatLng);
+      } else if (originLatLng.longitude > destinationLatLng.longitude) {
+        boundsLatLng = LatLngBounds(
+          southwest: LatLng(originLatLng.latitude, destinationLatLng.longitude),
+          northeast: LatLng(destinationLatLng.latitude, originLatLng.longitude),
+        );
+      } else if (originLatLng.latitude > destinationLatLng.latitude) {
+        boundsLatLng = LatLngBounds(
+          southwest: LatLng(destinationLatLng.latitude, originLatLng.longitude),
+          northeast: LatLng(originLatLng.latitude, destinationLatLng.longitude),
+        );
+      } else {
+        boundsLatLng =
+            LatLngBounds(southwest: originLatLng, northeast: destinationLatLng);
+      }
+
+      newGoogleMapController!.animateCamera(
+        CameraUpdate.newLatLngBounds(boundsLatLng, 65),
       );
-      polylineSet.add(polyline);
-    });
 
-    LatLngBounds boundsLatLng;
-    if (originLatLng.latitude > destinationLatLng.latitude &&
-        originLatLng.longitude > destinationLatLng.longitude) {
-      boundsLatLng =
-          LatLngBounds(southwest: destinationLatLng, northeast: originLatLng);
-    } else if (originLatLng.longitude > destinationLatLng.longitude) {
-      boundsLatLng = LatLngBounds(
-        southwest: LatLng(originLatLng.latitude, destinationLatLng.longitude),
-        northeast: LatLng(destinationLatLng.latitude, originLatLng.longitude),
+      Marker originMarker = Marker(
+        markerId: const MarkerId("OrginMarkerId"),
+        infoWindow:
+            InfoWindow(title: originPosition.locationName, snippet: "Origin"),
+        position: originLatLng,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
       );
-    } else if (originLatLng.latitude > destinationLatLng.latitude) {
-      boundsLatLng = LatLngBounds(
-        southwest: LatLng(destinationLatLng.latitude, originLatLng.longitude),
-        northeast: LatLng(originLatLng.latitude, destinationLatLng.longitude),
+      Marker destinationaMarker = Marker(
+        markerId: const MarkerId("DestinationMarkerId"),
+        infoWindow: InfoWindow(
+            title: destinationPosition.locationName, snippet: "Destination"),
+        position: destinationLatLng,
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
       );
-    } else {
-      boundsLatLng =
-          LatLngBounds(southwest: originLatLng, northeast: destinationLatLng);
-    }
 
-    newGoogleMapController!.animateCamera(
-      CameraUpdate.newLatLngBounds(boundsLatLng, 65),
-    );
+      setState(() {
+        markerSet.add(originMarker);
+        markerSet.add(destinationaMarker);
+      });
 
-    Marker originMarker = Marker(
-      markerId: const MarkerId("OrginMarkerId"),
-      infoWindow:
-          InfoWindow(title: originPosition.locationName, snippet: "Origin"),
-      position: originLatLng,
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
-    );
-    Marker destinationaMarker = Marker(
-      markerId: const MarkerId("DestinationMarkerId"),
-      infoWindow: InfoWindow(
-          title: destinationPosition.locationName, snippet: "Destination"),
-      position: destinationLatLng,
-      icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-    );
+      Circle orginCircle = Circle(
+        circleId: const CircleId("CircleOrginId"),
+        center: originLatLng,
+        radius: 12,
+        strokeColor: Colors.white,
+        strokeWidth: 5,
+        fillColor: Colors.green,
+      );
+      Circle destinationCircle = Circle(
+        circleId: const CircleId("DestinationCircle"),
+        center: destinationLatLng,
+        radius: 12,
+        strokeColor: Colors.white,
+        strokeWidth: 5,
+        fillColor: Colors.red,
+      );
 
-    setState(() {
-      markerSet.add(originMarker);
-      markerSet.add(destinationaMarker);
-    });
-
-    Circle orginCircle = Circle(
-      circleId: const CircleId("CircleOrginId"),
-      center: originLatLng,
-      radius: 12,
-      strokeColor: Colors.white,
-      strokeWidth: 5,
-      fillColor: Colors.green,
-    );
-    Circle destinationCircle = Circle(
-      circleId: const CircleId("DestinationCircle"),
-      center: destinationLatLng,
-      radius: 12,
-      strokeColor: Colors.white,
-      strokeWidth: 5,
-      fillColor: Colors.red,
-    );
-
-    setState(() {
-      circleSet.add(orginCircle);
-      circleSet.add(destinationCircle);
-    });
+      setState(() {
+        circleSet.add(orginCircle);
+        circleSet.add(destinationCircle);
+      });
+    } //End Of if Conditon
   }
 
   void showSearchingForDrieverMechanicsContainer() {
@@ -730,23 +736,31 @@ class _AdminScreenState extends State<AdminScreen> {
               ),
               // Container for createActiveNearByMechanicsIconMarker()
               Positioned(
-                  top: 65,
-                  left: 60,
-                  child: Container(
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        createActiveNearByMechanicsIconMarker();
-                      },
-                      icon: const Icon(Icons.add),
-                      label:
-                          const Text("createActiveNearByMechanicsIconMarker"),
-                    ),
-                  )),
+                top: 65,
+                left: 60,
+                child: Container(
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      createActiveNearByMechanicsIconMarker();
+
+                      setState(() {
+                        markerSet.add(Marker(
+                          markerId: MarkerId(DateTime.now().toIso8601String()),
+                          position: const LatLng(37.4219999, -122.0840575),
+                          icon: activeNearbyIcon!,
+                        ));
+                      });
+                    },
+                    icon: const Icon(Icons.add),
+                    label: const Text("createActiveNearByMechanicsIconMarker"),
+                  ),
+                ),
+              ),
               Positioned(
                 bottom: 80,
                 right: 0,
@@ -823,23 +837,44 @@ class _AdminScreenState extends State<AdminScreen> {
                                     padding: const EdgeInsets.all(10),
                                     child: GestureDetector(
                                       onTap: () async {
+                                        // var responseFromSearchScreen =
+                                        //     await Navigator.push(
+                                        //   context,
+                                        //   MaterialPageRoute(
+                                        //     builder: (context) =>
+                                        //         const CarMechanicListScreen(),
+                                        //   ),
+                                        // );
+                                        // if (responseFromSearchScreen ==
+                                        //     "ObtainedDropOff") {
+                                        //   setState(() {
+                                        //     openNavigationDrawer = true;
+                                        //   });
+                                        // }
+                                        // await drawPolylineFromOriginToDestination();
+                                        // print(
+                                        //     drawPolylineFromOriginToDestination);
                                         var responseFromSearchScreen =
                                             await Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) =>
-                                                const CarMechanicListScreen(),
-                                          ),
+                                              builder: (context) =>
+                                                  const CarMechanicListScreen()),
                                         );
-                                        if (responseFromSearchScreen ==
-                                            "ObtainedDropOff") {
-                                          setState(() {
-                                            openNavigationDrawer = true;
-                                          });
+
+                                        if (responseFromSearchScreen != null) {
+                                          String carMechanicsName =
+                                              responseFromSearchScreen;
+                                          print(carMechanicsName);
+
+                                          if (carMechanicsName ==
+                                              "ObtainedDropOff") {
+                                            setState(() {
+                                              openNavigationDrawer = true;
+                                            });
+                                          }
+                                          await drawPolylineFromOriginToDestination();
                                         }
-                                        // await drawPolylineFromOriginToDestination();
-                                        // print(
-                                        //     drawPolylineFromOriginToDestination);
                                       },
                                       child: Row(
                                         children: [
@@ -878,23 +913,40 @@ class _AdminScreenState extends State<AdminScreen> {
                                               //       fontSize: 14),
                                               // ),
 
+                                              // openNavigationDrawer == false
+                                              //     ? const Text(
+                                              //         "Select the car mechaincs from the list",
+                                              //         style: TextStyle(
+                                              //           color: Colors.grey,
+                                              //           fontSize: 14,
+                                              //         ),
+                                              //       )
+                                              //     : Text(
+                                              //         // Provider.of<CarMechanicsDetails>(
+                                              //         //         context)
+                                              //         //     .selectCarMechanics!
+                                              //         //     .name!,
+                                              //         Provider.of<CarMechanicsDetails>(
+                                              //                     context)
+                                              //                 .selectCarMechanics
+                                              //                 ?.name ??
+                                              //             "No car mechanics selected",
+                                              //         style: const TextStyle(
+                                              //           color: Colors.black,
+                                              //           fontSize: 14,
+                                              //         ),
+                                              //       ),
+
                                               openNavigationDrawer == false
                                                   ? const Text(
-                                                      "Select the car mechaincs from the list",
+                                                      "Select the car mechanics from the list",
                                                       style: TextStyle(
                                                         color: Colors.grey,
                                                         fontSize: 14,
                                                       ),
                                                     )
                                                   : Text(
-                                                      // Provider.of<CarMechanicsDetails>(
-                                                      //         context)
-                                                      //     .selectCarMechanics!
-                                                      //     .name!,
-                                                      Provider.of<CarMechanicsDetails>(
-                                                                  context)
-                                                              .selectCarMechanics
-                                                              ?.name ??
+                                                      carMechanicsName ??
                                                           "No car mechanics selected",
                                                       style: const TextStyle(
                                                         color: Colors.black,
@@ -922,19 +974,22 @@ class _AdminScreenState extends State<AdminScreen> {
                                     //         listen: false)
                                     //     .selectCarMechanics!
                                     //     .name);
-                                    if (Provider.of<CarMechanicsDetails>(
+
+                                    var selectCarMechanics =
+                                        Provider.of<CarMechanicsDetails>(
                                                 context,
                                                 listen: false)
-                                            .selectCarMechanics!
-                                            .name !=
-                                        null) {
-                                      toggleshowSuggestedRidesContainer();
+                                            .selectCarMechanics;
+                                    if (selectCarMechanics != null &&
+                                        selectCarMechanics.name != null) {
+                                      // toggleshowSuggestedRidesContainer();
                                     } else {
                                       Fluttertoast.showToast(
                                           msg:
                                               "Please choose car mechanics near you.");
                                     }
-                                    // toggleshowSuggestedRidesContainer();
+
+                                    toggleshowSuggestedRidesContainer();
                                   },
                                   style: ElevatedButton.styleFrom(
                                     textStyle: const TextStyle(
@@ -1230,24 +1285,24 @@ class _AdminScreenState extends State<AdminScreen> {
   }
 }
 
-                                                // const SearchPlacesScreen(),
-                                                // builder: (context) =>
-                                                // const SearchCarMechanics(),
+// const SearchPlacesScreen(),
+// builder: (context) =>
+// const SearchCarMechanics(),
 
-                                                // ElevatedButton(
-                                                //   onPressed: () {
-                                                //     Navigator.push(
-                                                //         context,
-                                                //         MaterialPageRoute(
-                                                //           builder: (context) =>
-                                                //               const PrecisePickUpLocation(),
-                                                //         ));
-                                                //   },
-                                                //   style: ElevatedButton.styleFrom(
-                                                //     textStyle: const TextStyle(
-                                                //       fontWeight: FontWeight.bold,
-                                                //       fontSize: 16,
-                                                //     ),
-                                                //   ),
-                                                //   child: const Text("change Pick Up Address"),
-                                                // ),
+// ElevatedButton(
+//   onPressed: () {
+//     Navigator.push(
+//         context,
+//         MaterialPageRoute(
+//           builder: (context) =>
+//               const PrecisePickUpLocation(),
+//         ));
+//   },
+//   style: ElevatedButton.styleFrom(
+//     textStyle: const TextStyle(
+//       fontWeight: FontWeight.bold,
+//       fontSize: 16,
+//     ),
+//   ),
+//   child: const Text("change Pick Up Address"),
+// ),
