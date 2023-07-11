@@ -837,23 +837,6 @@ class _AdminScreenState extends State<AdminScreen> {
                                     padding: const EdgeInsets.all(10),
                                     child: GestureDetector(
                                       onTap: () async {
-                                        // var responseFromSearchScreen =
-                                        //     await Navigator.push(
-                                        //   context,
-                                        //   MaterialPageRoute(
-                                        //     builder: (context) =>
-                                        //         const CarMechanicListScreen(),
-                                        //   ),
-                                        // );
-                                        // if (responseFromSearchScreen ==
-                                        //     "ObtainedDropOff") {
-                                        //   setState(() {
-                                        //     openNavigationDrawer = true;
-                                        //   });
-                                        // }
-                                        // await drawPolylineFromOriginToDestination();
-                                        // print(
-                                        //     drawPolylineFromOriginToDestination);
                                         var responseFromSearchScreen =
                                             await Navigator.push(
                                           context,
@@ -863,13 +846,15 @@ class _AdminScreenState extends State<AdminScreen> {
                                         );
 
                                         if (responseFromSearchScreen != null) {
-                                          String carMechanicsName =
+                                          String newCarMechanicsName =
                                               responseFromSearchScreen;
-                                          print(carMechanicsName);
+                                          print(newCarMechanicsName);
 
-                                          if (carMechanicsName ==
-                                              "ObtainedDropOff") {
+                                          if (newCarMechanicsName != null &&
+                                              newCarMechanicsName.isNotEmpty) {
                                             setState(() {
+                                              carMechanicsName =
+                                                  newCarMechanicsName;
                                               openNavigationDrawer = true;
                                             });
                                           }
