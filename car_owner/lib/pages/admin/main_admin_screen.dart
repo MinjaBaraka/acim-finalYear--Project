@@ -880,48 +880,6 @@ class _AdminScreenState extends State<AdminScreen> {
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-
-                                              // Text(
-                                              //   Provider.of<CarMechanicsDetails>(
-                                              //                   context)
-                                              //               .selectCarMechanics !=
-                                              //           null
-                                              //  /     ? (Provider.of<CarMechanicsDetails>(
-                                              //                       context)
-                                              //                   .selectCarMechanics!
-                                              //                   .name!)
-                                              //               .substring(0, 24) +
-                                              //           "...."
-                                              //       : "Select the car mechaincs from the list",
-                                              //   style: const TextStyle(
-                                              //       color: Colors.grey,
-                                              //       fontSize: 14),
-                                              // ),
-
-                                              // openNavigationDrawer == false
-                                              //     ? const Text(
-                                              //         "Select the car mechaincs from the list",
-                                              //         style: TextStyle(
-                                              //           color: Colors.grey,
-                                              //           fontSize: 14,
-                                              //         ),
-                                              //       )
-                                              //     : Text(
-                                              //         // Provider.of<CarMechanicsDetails>(
-                                              //         //         context)
-                                              //         //     .selectCarMechanics!
-                                              //         //     .name!,
-                                              //         Provider.of<CarMechanicsDetails>(
-                                              //                     context)
-                                              //                 .selectCarMechanics
-                                              //                 ?.name ??
-                                              //             "No car mechanics selected",
-                                              //         style: const TextStyle(
-                                              //           color: Colors.black,
-                                              //           fontSize: 14,
-                                              //         ),
-                                              //       ),
-
                                               openNavigationDrawer == false
                                                   ? const Text(
                                                       "Select the car mechanics from the list",
@@ -954,27 +912,16 @@ class _AdminScreenState extends State<AdminScreen> {
                                 const SizedBox(width: 10),
                                 ElevatedButton(
                                   onPressed: () {
-                                    // print(Provider.of<CarMechanicsDetails>(
-                                    //         context,
-                                    //         listen: false)
-                                    //     .selectCarMechanics!
-                                    //     .name);
-
-                                    var selectCarMechanics =
-                                        Provider.of<CarMechanicsDetails>(
-                                                context,
-                                                listen: false)
-                                            .selectCarMechanics;
-                                    if (selectCarMechanics != null &&
-                                        selectCarMechanics.name != null) {
-                                      // toggleshowSuggestedRidesContainer();
+                                    if (carMechanicsName != null &&
+                                        carMechanicsName!.isNotEmpty) {
+                                      toggleshowSuggestedRidesContainer();
                                     } else {
                                       Fluttertoast.showToast(
                                           msg:
-                                              "Please choose car mechanics near you.");
+                                              "Please choose car mechanics from list.");
                                     }
 
-                                    toggleshowSuggestedRidesContainer();
+                                    // toggleshowSuggestedRidesContainer();
                                   },
                                   style: ElevatedButton.styleFrom(
                                     textStyle: const TextStyle(
@@ -1000,8 +947,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 left: 0,
                 right: 0,
                 child: Container(
-                  // height: suggestedRidesContainerHeight,
-                  height: searchingForDriverMechanicsContainer,
+                  height: suggestedRidesContainerHeight,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.only(
@@ -1022,10 +968,10 @@ class _AdminScreenState extends State<AdminScreen> {
                         const SizedBox(height: 10),
                         const Center(
                           child: Text(
-                            "Sending Notification to Mechanics...",
+                            "Sending Notification to Car Mechanics.....",
                             style: TextStyle(
                               color: Colors.grey,
-                              fontSize: 22,
+                              fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
