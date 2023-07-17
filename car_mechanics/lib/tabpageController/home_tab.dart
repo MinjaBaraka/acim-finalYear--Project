@@ -72,20 +72,35 @@ class _HomeTabPageState extends State<HomeTabPage> {
         .once()
         .then((snap) {
       if (snap.snapshot.value != null) {
-        onlineMechanicsData.id = (snap.snapshot.value as Map)["id"];
-        onlineMechanicsData.name = (snap.snapshot.value as Map)["Name"];
-        onlineMechanicsData.email = (snap.snapshot.value as Map)["Email"];
-        onlineMechanicsData.carColor =
-            (snap.snapshot.value as Map)["car_details"]["car_color"];
-        onlineMechanicsData.carModel =
-            (snap.snapshot.value as Map)["car_details"]["car_model"];
-        onlineMechanicsData.carNumber =
-            (snap.snapshot.value as Map)["car_details"]["car_number"];
-        onlineMechanicsData.carType =
-            (snap.snapshot.value as Map)["car_details"]["car_type"];
+        Map snapshotData = snap.snapshot.value as Map;
 
-        mechanicsTypeDetails =
-            (snap.snapshot.value as Map)["car_details"]["type"];
+        if (snapshotData.containsKey("car_details") &&
+            snapshotData["car_details"] is Map) {
+          Map carDetails = snapshotData["car_details"];
+
+          onlineMechanicsData.carColor = carDetails.containsKey("car_color")
+              ? carDetails["car_color"]
+              : "default color";
+          onlineMechanicsData.carModel = carDetails.containsKey("car_model")
+              ? carDetails["car_model"]
+              : "default model";
+          onlineMechanicsData.carNumber = carDetails.containsKey("car_number")
+              ? carDetails["car_number"]
+              : "default number";
+          onlineMechanicsData.carType = carDetails.containsKey("car_type")
+              ? carDetails["car_type"]
+              : "default type";
+        } else {
+          onlineMechanicsData.carColor = "default color";
+          onlineMechanicsData.carModel = "default model";
+          onlineMechanicsData.carNumber = "default number";
+          onlineMechanicsData.carType = "default type";
+        }
+      } else {
+        onlineMechanicsData.carColor = "default color";
+        onlineMechanicsData.carModel = "default model";
+        onlineMechanicsData.carNumber = "default number";
+        onlineMechanicsData.carType = "default type";
       }
     });
   }
