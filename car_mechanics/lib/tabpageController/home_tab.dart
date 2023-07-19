@@ -113,9 +113,18 @@ class _HomeTabPageState extends State<HomeTabPage> {
     }
   }
 
+  void initializePosition() async {
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    dirvermechanicsCurrentPosition = position;
+    updateMechanicsLocationAtRealTime();
+  }
+
   @override
   void initState() {
     super.initState();
+
+    initializePosition();
 
     checkIfLocationPermissionAllowed();
 
@@ -248,20 +257,52 @@ class _HomeTabPageState extends State<HomeTabPage> {
     ref.onValue.listen((event) {});
   }
 
+  // updateMechanicsLocationAtRealTime() {
+  //   streamSubscriptionPosition =
+  //       Geolocator.getPositionStream().listen((Position position) {
+  //     if (isMechanicsActive == true) {
+  //       Geofire.setLocation(
+  //           currentUser!.uid,
+  //           dirvermechanicsCurrentPosition!.latitude,
+  //           dirvermechanicsCurrentPosition!.longitude);
+  //     }
+
+  //     LatLng latLng = LatLng(dirvermechanicsCurrentPosition!.latitude,
+  //         dirvermechanicsCurrentPosition!.longitude);
+
+  //     newGoogleMapController!.animateCamera(CameraUpdate.newLatLng(latLng));
+  //   });
+  // }
+
   updateMechanicsLocationAtRealTime() {
     streamSubscriptionPosition =
         Geolocator.getPositionStream().listen((Position position) {
       if (isMechanicsActive == true) {
-        Geofire.setLocation(
-            currentUser!.uid,
-            dirvermechanicsCurrentPosition!.latitude,
-            dirvermechanicsCurrentPosition!.longitude);
+        // Check if currentUser and dirvermechanicsCurrentPosition are not null
+        if (currentUser != null && dirvermechanicsCurrentPosition != null) {
+          Geofire.setLocation(
+              currentUser!.uid,
+              dirvermechanicsCurrentPosition!.latitude,
+              dirvermechanicsCurrentPosition!.longitude);
+        } else {
+          print('currentUser or dirvermechanicsCurrentPosition is null');
+        }
       }
 
-      LatLng latLng = LatLng(dirvermechanicsCurrentPosition!.latitude,
-          dirvermechanicsCurrentPosition!.longitude);
+      // Check if dirvermechanicsCurrentPosition is not null
+      if (dirvermechanicsCurrentPosition != null) {
+        LatLng latLng = LatLng(dirvermechanicsCurrentPosition!.latitude,
+            dirvermechanicsCurrentPosition!.longitude);
 
-      newGoogleMapController!.animateCamera(CameraUpdate.newLatLng(latLng));
+        // Check if newGoogleMapController is not null
+        if (newGoogleMapController != null) {
+          newGoogleMapController!.animateCamera(CameraUpdate.newLatLng(latLng));
+        } else {
+          print('newGoogleMapController is null');
+        }
+      } else {
+        print('dirvermechanicsCurrentPosition is null');
+      }
     });
   }
 

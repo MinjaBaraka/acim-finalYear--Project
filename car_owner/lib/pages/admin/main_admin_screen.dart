@@ -1008,88 +1008,6 @@ class _AdminScreenState extends State<AdminScreen> {
                 ),
               ),
 
-              // Request a RideMechanics
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
-                  // height: suggestedRidesContainerHeight,
-                  height: searchingForDriverMechanicsContainer,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(15),
-                      topRight: Radius.circular(15),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 18),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const LinearProgressIndicator(
-                          color: Colors.blue,
-                        ),
-                        const SizedBox(height: 10),
-                        const Center(
-                          child: Text(
-                            "Sending Notification to Car Mechanics.....",
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        GestureDetector(
-                          onTap: () {
-                            // referenceMechanicsRequest!.remove();
-                            referenceMechanicsRequest?.remove();
-                            setState(() {
-                              searchingForDriverMechanicsContainer = 0;
-                              suggestedRidesContainerHeight = 0;
-                            });
-                          },
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(25),
-                              border: Border.all(
-                                width: 1,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            child: const Icon(
-                              Icons.close,
-                              size: 25,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 15),
-                        const SizedBox(
-                          width: double.infinity,
-                          child: Text(
-                            "Cancel",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
               // UI for Suggested rides
 
               Positioned(
@@ -1130,9 +1048,17 @@ class _AdminScreenState extends State<AdminScreen> {
                                       null
                                   ? (Provider.of<AppInfo>(context)
                                               .userPickUpLocation!
-                                              .locationName!)
-                                          .substring(0, 24) +
-                                      "...."
+                                              .locationName!
+                                              .length <=
+                                          24
+                                      ? Provider.of<AppInfo>(context)
+                                          .userPickUpLocation!
+                                          .locationName!
+                                      : Provider.of<AppInfo>(context)
+                                              .userPickUpLocation!
+                                              .locationName!
+                                              .substring(0, 24) +
+                                          "....")
                                   : "Where to..?",
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
@@ -1313,9 +1239,15 @@ class _AdminScreenState extends State<AdminScreen> {
                         Expanded(
                           child: GestureDetector(
                             onTap: () {
+                              print('GestureDetector tapped');
                               if (selectedMechanicsVehicleType != "") {
+                                print(
+                                    'selectedMechanicsVehicleType: $selectedMechanicsVehicleType');
                                 saveMechanicsRequestMechanicsInformation(
                                     selectedMechanicsVehicleType);
+                                setState(() {
+                                  searchingForDriverMechanicsContainer = 400;
+                                });
                               } else {
                                 Fluttertoast.showToast(
                                     msg:
@@ -1340,6 +1272,88 @@ class _AdminScreenState extends State<AdminScreen> {
                                   ),
                                 ),
                               ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              // Request a RideMechanics
+
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  height: searchingForDriverMechanicsContainer,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(15),
+                      topRight: Radius.circular(15),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 24, vertical: 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const LinearProgressIndicator(
+                          color: Colors.blue,
+                        ),
+                        const SizedBox(height: 10),
+                        const Center(
+                          child: Text(
+                            "Waiting Notification Feedback...",
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        GestureDetector(
+                          onTap: () {
+                            // referenceMechanicsRequest!.remove();
+                            referenceMechanicsRequest?.remove();
+                            setState(() {
+                              searchingForDriverMechanicsContainer = 0;
+                              suggestedRidesContainerHeight = 0;
+                            });
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(25),
+                              border: Border.all(
+                                width: 1,
+                                color: Colors.grey,
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.close,
+                              size: 25,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 15),
+                        const SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            "Cancel",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),

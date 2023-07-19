@@ -420,24 +420,24 @@ class _NewMechanicsTripeState extends State<NewMechanicsTripe> {
             },
           ),
           // A Button for createDriveMechanicsIconMarker();
-          Positioned(
-            left: 0,
-            right: 0,
-            top: 30,
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.black,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  createDriveMechanicsIconMarker();
-                },
-                icon: const Icon(Icons.push_pin),
-                label: const Text("createDriveMechanicsIconMarker"),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   left: 0,
+          //   right: 0,
+          //   top: 30,
+          //   child: Container(
+          //     decoration: BoxDecoration(
+          //       color: Colors.black,
+          //       borderRadius: BorderRadius.circular(20),
+          //     ),
+          //     child: ElevatedButton.icon(
+          //       onPressed: () {
+          //         createDriveMechanicsIconMarker();
+          //       },
+          //       icon: const Icon(Icons.push_pin),
+          //       label: const Text("createDriveMechanicsIconMarker"),
+          //     ),
+          //   ),
+          // ),
           Positioned(
             bottom: 0,
             left: 0,

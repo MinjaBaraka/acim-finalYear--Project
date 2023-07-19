@@ -53,6 +53,7 @@ class PushNotificationSystem {
         .child("mechanicsId")
         .onValue
         .listen((event) {
+      print('Data received: ${event.snapshot.value}');
       if (event.snapshot.value == "waiting" ||
           event.snapshot.value == firebaseAuth.currentUser!.uid) {
         FirebaseDatabase.instance

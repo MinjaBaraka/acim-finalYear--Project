@@ -39,10 +39,10 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
           children: [
             Image.asset(
               onlineMechanicsData.carType == "Car Mechanics"
-                  ? "assets/image/2.jpg"
+                  ? "assets/img/13.jpg"
                   : onlineMechanicsData.carType == "CNG Mechanics"
-                      ? "assets/image/2.jpg"
-                      : "assets/image/2.jpg",
+                      ? "assets/img/14.jpg"
+                      : "assets/img/15.jpg",
             ),
             const SizedBox(height: 10),
             // Title
