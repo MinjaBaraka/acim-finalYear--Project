@@ -3,7 +3,9 @@
 import 'dart:convert';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -113,17 +115,21 @@ class RequestMethod {
     return double.parse(totalFareAmount.toStringAsFixed(1));
   }
 
-  static sendNitificationToMechanicsNow(String deviceRegistrationToken,
-      String userRideMechanicsRequested, context) async {
+  static sendNitificationToMechanicsNow(
+      String deviceRegistrationToken,
+      String userRideMechanicsRequested,
+      String carMechanicsName,
+      context) async {
     String destinationAddress = userDropOffAddress;
 
     Map<String, String> headerNotification = {
       "content-Type": "application/json",
-      "Authorization": cloudMessageServerToken,
+      "Authorization": 'key=$cloudMessageServerToken',
     };
 
     Map bodyNotification = {
       "body": "Destination Address: \n$destinationAddress",
+      "name": "Car Mechanics Name: $carMechanicsName",
       "title": "New Mechanics Request",
     };
 
@@ -141,11 +147,17 @@ class RequestMethod {
       "to": deviceRegistrationToken,
     };
 
-    var responseNotification = http.post(
+    var responseNotification = await http.post(
       Uri.parse("https://fcm.googleapis.com/fcm/send"),
       headers: headerNotification,
       body: jsonEncode(officialNotificationFormat),
     );
+
+    if (responseNotification.statusCode == 200) {
+      Fluttertoast.showToast(msg: "Notification sent Successfully");
+    } else {
+      Fluttertoast.showToast(msg: "Notification sending Failed");
+    }
   }
 
   // static Future<List<CarMechanic>> fetchCarMechanics() async {

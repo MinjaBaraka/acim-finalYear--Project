@@ -413,12 +413,34 @@ class _AdminScreenState extends State<AdminScreen> {
       "longitude": originLocation.locationLongtitude,
     };
 
-    Map destinationLocationMap = {
-      // *Key: Value
+    // Map destinationLocationMap = {
+    //   // *Key: Value
 
-      "latitude": destinationLocation!.locationLatitude,
-      "longitude": destinationLocation.locationLongtitude,
-    };
+    //   "latitude": destinationLocation!.locationLatitude,
+    //   "longitude": destinationLocation.locationLongtitude,
+    // };
+
+    // Map userInformationMap = {
+    //   "origin": originLocationMap,
+    //   "destination": destinationLocationMap,
+    //   "time": DateTime.now().toString(),
+    //   "userName": userModalCurrentInfo!.name,
+    //   "userPhone": userModalCurrentInfo!.phone,
+    //   "originAddress": originLocation.locationName,
+    //   "destinationAddress": destinationLocation.locationName,
+    //   "mechanicsId": "waiting",
+    // };
+    var destLocation = destinationLocation;
+    Map? destinationLocationMap;
+    String? destinationLocationName;
+
+    if (destLocation != null) {
+      destinationLocationMap = {
+        "latitude": destLocation.locationLatitude,
+        "longitude": destLocation.locationLongtitude,
+      };
+      destinationLocationName = destLocation.locationName;
+    }
 
     Map userInformationMap = {
       "origin": originLocationMap,
@@ -427,7 +449,7 @@ class _AdminScreenState extends State<AdminScreen> {
       "userName": userModalCurrentInfo!.name,
       "userPhone": userModalCurrentInfo!.phone,
       "originAddress": originLocation.locationName,
-      "destinationAddress": destinationLocation.locationName,
+      "destinationAddress": destinationLocationName,
       "mechanicsId": "waiting",
     };
 
@@ -550,19 +572,19 @@ class _AdminScreenState extends State<AdminScreen> {
         pLineCordinatesList.clear();
       });
 
-      // Fluttertoast.showToast(msg: "No online nearest Car Mechanics Available");
-      // Fluttertoast.showToast(msg: "Search Again. \n Restart App");
+      Fluttertoast.showToast(msg: "No online nearest Car Mechanics Available");
+      Fluttertoast.showToast(msg: "Search Again. \n Restart App");
 
-      // Future.delayed(const Duration(milliseconds: 4000), () {
-      //   if (referenceMechanicsRequest != null) {
-      //     referenceMechanicsRequest!.remove();
-      //   }
-      //   Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //         builder: (context) => const SplashScreen(),
-      //       ));
-      // });
+      Future.delayed(const Duration(milliseconds: 4000), () {
+        if (referenceMechanicsRequest != null) {
+          referenceMechanicsRequest!.remove();
+        }
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SplashScreen(),
+            ));
+      });
       return;
     }
 
@@ -571,17 +593,36 @@ class _AdminScreenState extends State<AdminScreen> {
 
     print("Mechanics List: " + driverMechanicsList.toString());
 
+    // for (int i = 0; i < driverMechanicsList.length; i++) {
+    //   if (driverMechanicsList[i]["car_mechanics_details"]?["type"] ==
+    //       selectedMechanicsVehicleType) {
+    //     RequestMethod.sendNitificationToMechanicsNow(
+    //         driverMechanicsList[i]["token"],
+    //         referenceMechanicsRequest!.key!,
+    //         carMechanicsName!,
+    //         context);
+    //   }
+    // }
+
     for (int i = 0; i < driverMechanicsList.length; i++) {
-      if (driverMechanicsList[i]["car_mechanics_details"]["type"] ==
-          selectedMechanicsVehicleType) {
-        print(
-            "inside loop, sending notification to: ${driverMechanicsList[i]["token"]}");
-        RequestMethod.sendNitificationToMechanicsNow(
-            driverMechanicsList[i]["token"],
-            referenceMechanicsRequest!.key!,
-            context);
+      try {
+        var mechanic = driverMechanicsList[i];
+        if (mechanic != null &&
+            mechanic["car_mechanics_details"]?["type"] ==
+                selectedMechanicsVehicleType) {
+          var token = mechanic["token"];
+          if (token != null &&
+              referenceMechanicsRequest?.key != null &&
+              carMechanicsName != null) {
+            RequestMethod.sendNitificationToMechanicsNow(token,
+                referenceMechanicsRequest!.key!, carMechanicsName!, context);
+          }
+        }
+      } catch (e) {
+        print('Error: $e');
       }
     }
+
     Fluttertoast.showToast(msg: "Notitfication sent Successfully");
 
     showSearchingForDrieverMechanicsContainer();
@@ -1183,10 +1224,10 @@ class _AdminScreenState extends State<AdminScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    selectedMechanicsVehicleType =
-                                        "Bike mechanics";
-                                  });
+                                  // setState(() {
+                                  //   selectedMechanicsVehicleType =
+                                  //       "Bike mechanics";
+                                  // });
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
@@ -1225,15 +1266,15 @@ class _AdminScreenState extends State<AdminScreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  setState(() {
-                                    selectedMechanicsVehicleType =
-                                        "Motorbike mechanics";
-                                  });
+                                  // setState(() {
+                                  //   selectedMechanicsVehicleType =
+                                  //       "CNG mechanics";
+                                  // });
                                 },
                                 child: Container(
                                   decoration: BoxDecoration(
                                     color: selectedMechanicsVehicleType ==
-                                            "motorbike Mechanics"
+                                            "CNG Mechanics"
                                         ? Colors.grey
                                         : Colors.white,
                                     borderRadius: BorderRadius.circular(12),
@@ -1250,12 +1291,12 @@ class _AdminScreenState extends State<AdminScreen> {
                                         ),
                                         const SizedBox(height: 8),
                                         Text(
-                                          "Motorbike Mechanics",
+                                          "CNG Mechanics",
                                           style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             color:
                                                 selectedMechanicsVehicleType ==
-                                                        "Motorbike Mechanics"
+                                                        "CNG Mechanics"
                                                     ? Colors.grey
                                                     : Colors.black,
                                           ),
