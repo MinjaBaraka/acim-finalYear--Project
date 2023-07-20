@@ -22,10 +22,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(const Duration(seconds: 5), () async {
-      if (await firebaseAuth.currentUser != null) {
+      if (firebaseAuth.currentUser != null) {
         firebaseAuth.currentUser != null
             ? RequestMethod.readCurrentOnlineUserInfo(context)
             : null;
+
+        // RequestMethod.readCurrentOnlineUserInfo(context);
 
         Navigator.pushReplacement(
           context,

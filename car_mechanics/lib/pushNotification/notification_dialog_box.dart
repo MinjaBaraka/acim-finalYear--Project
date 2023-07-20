@@ -173,9 +173,12 @@ class _NotificationDialogBoxState extends State<NotificationDialogBox> {
         .child("acim_mechanics")
         .child(firebaseAuth.currentUser!.uid)
         .child("newRideMechanicsStatus")
-        .once()
-        .then((snap) {
-      if (snap.snapshot.value == "idle") {
+        // .once()
+        // .then((snap) {
+        .onValue
+        .listen((event) {
+      var snapshot = event.snapshot;
+      if (snapshot.value == "idle") {
         FirebaseDatabase.instance
             .ref()
             .child("acim_mechanics")

@@ -23,7 +23,7 @@ class PushNotificationSystem {
         .then((RemoteMessage? remoteMessage) {
       if (remoteMessage != null) {
         readUserRideMechanicsRequestInformation(
-            remoteMessage.data["MechanicsRequestId"], context);
+            remoteMessage.data["mechanicsRequestId"], context);
       }
     });
 
@@ -32,7 +32,7 @@ class PushNotificationSystem {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage remoteMessage) {
       readUserRideMechanicsRequestInformation(
-          remoteMessage.data["MechanicsRequestId"], context);
+          remoteMessage.data["mechanicsRequestId"], context);
     });
 
     // 3. Background
@@ -40,7 +40,7 @@ class PushNotificationSystem {
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage remoteMessage) {
       readUserRideMechanicsRequestInformation(
-          remoteMessage.data["MechanicsRequestId"], context);
+          remoteMessage.data["mechanicsRequestId"], context);
     });
   }
 
@@ -48,7 +48,7 @@ class PushNotificationSystem {
       String userRideMechanicsRequestId, BuildContext context) {
     FirebaseDatabase.instance
         .ref()
-        .child("All Mechanics Requests")
+        .child("All Mechanics Request")
         .child(userRideMechanicsRequestId)
         .child("mechanicsId")
         .onValue
@@ -58,7 +58,7 @@ class PushNotificationSystem {
           event.snapshot.value == firebaseAuth.currentUser!.uid) {
         FirebaseDatabase.instance
             .ref()
-            .child("All Mechanics Requests")
+            .child("All Mechanics Request")
             .child(userRideMechanicsRequestId)
             .once()
             .then((snapData) {

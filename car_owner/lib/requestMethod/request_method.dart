@@ -129,7 +129,6 @@ class RequestMethod {
 
     Map bodyNotification = {
       "body": "Destination Address: \n$destinationAddress",
-      "name": "Car Mechanics Name: $carMechanicsName",
       "title": "New Mechanics Request",
     };
 
@@ -138,6 +137,7 @@ class RequestMethod {
       "id": "1",
       "status": "done",
       "mechanicsRequestId": userRideMechanicsRequested,
+      "carMechanicsName": carMechanicsName,
     };
 
     Map officialNotificationFormat = {

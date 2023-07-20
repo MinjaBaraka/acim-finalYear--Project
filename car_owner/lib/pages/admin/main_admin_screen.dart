@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:car_onwer/model/active_nearby_available_mechanics.dart';
+import 'package:car_onwer/pages/admin/payment.dart';
 import 'package:car_onwer/pages/admin/searchcar_mechanics.dart';
 import 'package:car_onwer/requestMethod/geofire_assistant.dart';
 import 'package:car_onwer/splashScreen/splash_screen.dart';
@@ -413,29 +414,14 @@ class _AdminScreenState extends State<AdminScreen> {
       "longitude": originLocation.locationLongtitude,
     };
 
-    // Map destinationLocationMap = {
-    //   // *Key: Value
-
-    //   "latitude": destinationLocation!.locationLatitude,
-    //   "longitude": destinationLocation.locationLongtitude,
-    // };
-
-    // Map userInformationMap = {
-    //   "origin": originLocationMap,
-    //   "destination": destinationLocationMap,
-    //   "time": DateTime.now().toString(),
-    //   "userName": userModalCurrentInfo!.name,
-    //   "userPhone": userModalCurrentInfo!.phone,
-    //   "originAddress": originLocation.locationName,
-    //   "destinationAddress": destinationLocation.locationName,
-    //   "mechanicsId": "waiting",
-    // };
     var destLocation = destinationLocation;
     Map? destinationLocationMap;
     String? destinationLocationName;
 
     if (destLocation != null) {
       destinationLocationMap = {
+        // *Key: Value
+
         "latitude": destLocation.locationLatitude,
         "longitude": destLocation.locationLongtitude,
       };
@@ -526,7 +512,8 @@ class _AdminScreenState extends State<AdminScreen> {
 
             var respone = await showDialog(
               context: context,
-              builder: (context) => PayFareAmountDialog(fareAmount: fareAmount),
+              builder: (context) =>
+                  const PaymentFlutterWave('Payment', key: null),
             );
 
             // User car Owner can rating driver car Mechanics now
